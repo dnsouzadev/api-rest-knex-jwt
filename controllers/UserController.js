@@ -62,6 +62,14 @@ class UserController {
 
         return res.status(200).json({ success: true, message: "User Updated!" })
     }
+
+    async remove(req, res) {
+        const { id } = req.params
+
+        const result = await User.delete(id)
+
+        return result ? res.status(200).json({ success: true, message: "User Deleted!" }) : res.status(400).json({ success: false, message: "User not Deleted or Not Exists" })
+    }
 }
 
 module.exports = new UserController()

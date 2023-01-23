@@ -12,5 +12,6 @@ router.get('/user/:id', UserController.findUserById)
 router.get('/user/q/:email', UserController.findUserByEmail)
 router.post('/user', UserController.create)
 router.put('/user', UserController.edit)
+router.delete('/user/:id', UserController.remove)
 
 module.exports = router;
