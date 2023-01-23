@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const PasswordToken = require("../models/PasswordToken")
 
 class UserController {
     async index(req, res) {
@@ -69,6 +70,15 @@ class UserController {
         const result = await User.delete(id)
 
         return result ? res.status(200).json({ success: true, message: "User Deleted!" }) : res.status(400).json({ success: false, message: "User not Deleted or Not Exists" })
+    }
+
+    async recoveryPassword(req, res) {
+        const { email } = req.body
+
+        const result = await PasswordToken.create(email)
+
+        return result ? res.status(200).json({ success: true, message: "Token Created" }) : res.status(400).json({ success: false, message: "Please, check your fields" })
+
     }
 }
 
