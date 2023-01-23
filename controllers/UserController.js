@@ -80,6 +80,16 @@ class UserController {
         return result ? res.status(200).json({ success: true, message: "Token Created" }) : res.status(400).json({ success: false, message: "Please, check your fields" })
 
     }
+
+    async changePassword(req, res) {
+        const { token, password } = req.body
+
+        const isTokenValid = await PasswordToken.validate(token)
+
+        if (!isTokenValid) {
+            return res.status(406).json({ success: false, message: "Token is Invalid" })
+        }
+    }
 }
 
 module.exports = new UserController()
