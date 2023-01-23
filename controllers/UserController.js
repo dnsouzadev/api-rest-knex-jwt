@@ -50,6 +50,18 @@ class UserController {
             return res.status(400).json({ success: false, message: "Invalid Credentials" })
         }
     }
+
+    async edit(req, res) {
+        const { id, name, role, email } = req.body
+
+        const result = await User.update(id, name, email, role)
+
+        if (!result) {
+            return res.status(400).json({ success: false, message: "Please, check your fields" })
+        }
+
+        return res.status(200).json({ success: true, message: "User Updated!" })
+    }
 }
 
 module.exports = new UserController()

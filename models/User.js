@@ -70,6 +70,42 @@ class User {
         }
         
     }
+
+    async update(id, name, email, role) {
+        const user = await this.findById(id)
+
+        if (user === undefined || email === undefined) {
+            return false
+        }
+
+        const editUser = {}
+
+        if (email != user.email) {
+            const result = await this.findEmail(email)
+
+            if (!result) {
+                editUser.email = email
+            } else {
+                return false
+            }
+        }
+
+        if (name != undefined) {
+            editUser.name = name
+        }
+
+        if (role != undefined) {
+            editUser.role = role
+        }
+
+        try {
+            await knex.update(editUser).where({ id: id }).table("users")
+            return true
+        } catch (error) {
+            return false
+        }
+        
+    }
 }
 
 module.exports = new User()
