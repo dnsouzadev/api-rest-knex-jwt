@@ -32,18 +32,28 @@ class PasswordToken {
                 const tk = result[0]
 
                 if (tk.used) {
-                    return false
+                    return { status: false }
                 } else {
-                    return true
+                    return { status: true, token: tk }
                 }
             } else {
-                return false
+                return { status: false }
             }
+        } catch (error) {
+            console.log(error)
+            return { status: false }
+        }
+        
+    }
+
+    async setUsed(token) {
+        try {
+            await knex.update({used: 1}).where({token: token}).table("passwordTokens")
+            return true
         } catch (error) {
             console.log(error)
             return false
         }
-        
     }
 }
 

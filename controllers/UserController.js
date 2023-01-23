@@ -86,9 +86,13 @@ class UserController {
 
         const isTokenValid = await PasswordToken.validate(token)
 
-        if (!isTokenValid) {
+        if (!isTokenValid.status) {
             return res.status(406).json({ success: false, message: "Token is Invalid" })
         }
+
+        const result = await User.ChangePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
+
+        return result ? res.status(200).json({ success: true, message: "Password Changed Successfully" }) : res.status(406).json({ success: false, message: "Please, check your fields" })
     }
 }
 
