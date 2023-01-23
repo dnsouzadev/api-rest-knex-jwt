@@ -109,7 +109,9 @@ class UserController {
             const compare = await bcrypt.compare(password, user.password)
 
             if (compare) {
-                return res.json({ success: true, message: "logged in successfully"})
+                const token = jwt.sign({email: user.email, role: user.role}, secret)
+
+                return res.json({ success: true, message: "logged in successfully", token: token})
             }
 
             return res.json({ success: false, message: "password do not match"})
