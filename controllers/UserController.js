@@ -1,5 +1,9 @@
 const User = require("../models/User")
 const PasswordToken = require("../models/PasswordToken")
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+
+const secret = "secret"
 
 class UserController {
     async index(req, res) {
@@ -93,6 +97,25 @@ class UserController {
         const result = await User.ChangePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
 
         return result ? res.status(200).json({ success: true, message: "Password Changed Successfully" }) : res.status(406).json({ success: false, message: "Please, check your fields" })
+    }
+
+    async login(req, res) {
+        const { email, password } = req.body
+
+        const user = await User.findByEmail(email)
+
+        if (user != undefined) {
+
+            const compare = await bcrypt.compare(password, user.password)
+
+            if (compare) {
+                return res.json({ success: true, message: "logged in successfully"})
+            }
+
+            return res.json({ success: false, message: "password do not match"})
+        } else {
+            return res.json({ success: false, message: "user is not exists"})
+        }
     }
 }
 
